@@ -10,6 +10,8 @@ name = "pypi"
 django = "*"
 django-crispy-forms = "*"
 cibuildwheel = "*"
+uwsgi = "*"
+whitenoise = "*"
 
 
 [dev-packages]
