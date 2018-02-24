@@ -37,6 +37,7 @@ class Base(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'django_extensions',
     ]
 
     MIDDLEWARE = [

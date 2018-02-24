@@ -17,6 +17,8 @@ django-environ = "*"
 dj-database-url = "*"
 "psycopg2" = "*"
 raven = "*"
+ipython = "*"
+django-extensions = "*"
 
 
 [dev-packages]
