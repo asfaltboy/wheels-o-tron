@@ -130,7 +130,7 @@ class Production(Base):
     SECRET_KEY = '-_&@wp*3h_9k!!c^hi(!$wpe!c=o7590!s#1=md4@9u-q4h)_%'
 
     # configure our sentry connection
-    INSTALLED_APPS = Configuration.INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
+    INSTALLED_APPS = Configuration.INSTALLED_APPS + ['raven.contrib.django.raven_compat']
     SENTRY_DSN = values.Value()
     RAVEN_CONFIG = {
         'dsn': SENTRY_DSN,
