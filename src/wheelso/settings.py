@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
 import os
+import raven
 from configurations import Configuration, values
 
 
@@ -128,3 +128,13 @@ class Production(Base):
     ALLOWED_HOSTS = values.ListValue(['wheels-o-tron.herokuapp.com'])
     DATABASES = values.DatabaseURLValue()
     SECRET_KEY = '-_&@wp*3h_9k!!c^hi(!$wpe!c=o7590!s#1=md4@9u-q4h)_%'
+
+    # configure our sentry connection
+    INSTALLED_APPS = Configuration.INSTALLED_APPS + ('raven.contrib.django.raven_compat',)
+    SENTRY_DSN = values.Value()
+    RAVEN_CONFIG = {
+        'dsn': SENTRY_DSN,
+        # If you are using git, you can also automatically configure the
+        # release based on the git info.
+        'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+    }
