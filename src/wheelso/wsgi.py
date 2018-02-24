@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
 
 import os
 
-
+from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 from whitenoise import WhiteNoise
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wheelso.settings")
@@ -18,5 +18,5 @@ os.environ.setdefault('DJANGO_CONFIGURATION', 'Dev')
 from configurations.wsgi import get_wsgi_application  # noqa
 
 application = get_wsgi_application()
-application = WhiteNoise(application, root='../static')
+application = Sentry(WhiteNoise(application, root='../static'))
 # application.add_files('/path/to/more/static/files', prefix='more-files/')

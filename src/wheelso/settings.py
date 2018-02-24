@@ -128,13 +128,18 @@ class Production(Base):
     ALLOWED_HOSTS = values.ListValue(['wheels-o-tron.herokuapp.com'])
     DATABASES = values.DatabaseURLValue()
     SECRET_KEY = '-_&@wp*3h_9k!!c^hi(!$wpe!c=o7590!s#1=md4@9u-q4h)_%'
+    MIDDLEWARE = [
+          'raven.contrib.django.raven_compat.middleware.SentryMiddleware',
+    ] + Configuration.MIDDLEWARE
 
     # configure our sentry connection
     INSTALLED_APPS = Configuration.INSTALLED_APPS + ['raven.contrib.django.raven_compat']
     SENTRY_DSN = values.Value()
+    SENTRY_DSN_PUBLIC = 'https://903107d153c34ce4b15959f92a3959bb@sentry.io/293086'
     RAVEN_CONFIG = {
         'dsn': SENTRY_DSN,
         # If you are using git, you can also automatically configure the
         # release based on the git info.
-        'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+        'release': os.environ.get('HEROKU_SLUG_COMMIT'),
+        # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
     }
