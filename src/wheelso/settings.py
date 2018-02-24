@@ -55,7 +55,7 @@ class Base(Configuration):
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [],
+            'DIRS': [os.path.join(BASE_DIR, 'wheelso', 'templates')],
             'APP_DIRS': True,
             'OPTIONS': {
                 'context_processors': [
@@ -127,19 +127,20 @@ class Production(Base):
     DEBUG = values.BooleanValue(False)
     ALLOWED_HOSTS = values.ListValue(['wheels-o-tron.herokuapp.com'])
     DATABASES = values.DatabaseURLValue()
-    SECRET_KEY = '-_&@wp*3h_9k!!c^hi(!$wpe!c=o7590!s#1=md4@9u-q4h)_%'
+    SECRET_KEY = values.SecretValue()
     MIDDLEWARE = [
           'raven.contrib.django.raven_compat.middleware.SentryMiddleware',
     ] + Base.MIDDLEWARE
 
     # configure our sentry connection
     INSTALLED_APPS = Base.INSTALLED_APPS + ['raven.contrib.django.raven_compat']
-    SENTRY_DSN = values.Value()
-    SENTRY_DSN_PUBLIC = 'https://903107d153c34ce4b15959f92a3959bb@sentry.io/293086'
-    RAVEN_CONFIG = {
-        'dsn': SENTRY_DSN,
-        # If you are using git, you can also automatically configure the
-        # release based on the git info.
-        'release': os.environ.get('HEROKU_SLUG_COMMIT'),
-        # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
-    }
+    SENTRY_DSN = values.Value(None, environ_prefix=None)
+    SENTRY_DSN_PUBLIC = values.Value(None, environ_prefix=None)
+
+    @property
+    def RAVEN_CONFIG(self):
+        return {
+            'dsn': self.SENTRY_DSN,
+            'release': os.environ.get('HEROKU_SLUG_COMMIT'),
+            # 'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
+        }
